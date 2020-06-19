@@ -11,9 +11,10 @@ class Post
 	public:
 		Post();
 		
-		Post(string);
+		Post(string,string);
 		
 		//ATRIBUTOS
+		string titulo;
 		string contenido;
 		int likes;
 		int hates;

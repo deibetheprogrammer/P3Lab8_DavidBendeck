@@ -9,7 +9,8 @@ Post::Post()
 {
 }
 
-Post::Post(string contenido) {
+Post::Post(string titulo, string contenido) {
+	this->titulo = titulo;
 	this->contenido = contenido;
 }
 

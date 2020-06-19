@@ -18,7 +18,7 @@ class Usuario
 		string nombre;
 		string nomUsuario;
 		string clave;
-		vector<Usuario> seguidos;
+		vector<Usuario*> seguidos;
 		vector<Post> posts;
 		
 		//FUNCIONES
