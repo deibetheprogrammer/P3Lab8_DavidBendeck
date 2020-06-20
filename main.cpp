@@ -384,11 +384,11 @@ void guardarUsuarios(vector<Usuario*> &usuarios) {
     fstream fout; 
   
     // opens an existing csv file or creates a new file. 
-    fout.open("Usuarios.txt", ios::out | ios::app); 
+    fout.open("Usuarios.txt", ios::out); 
   
    	for(int i = 0; i < usuarios.size(); i++) {
    		
-   		fout << usuarios[i]->toString() << endl;
+   		fout << usuarios[i]->toString() << '\n';
    		
 	}
 	
@@ -411,13 +411,19 @@ void leerUsuarios(vector<Usuario*> &usuarios) {
     vector<string> row; 
     string line, word, temp; 
   
-    while (fin >> temp) { 
-  
+    while (!fin.eof()) { 
+  		
+  	//	cout << "nuevo loop" << endl;
+  		
         row.clear(); 
   
         // read an entire row and 
         // store it in a string variable 'line' 
         getline(fin, line); 
+        
+        if (line.size() < 4) {
+        	break;
+		}
   
         // used for breaking words 
         stringstream s(line); 
@@ -427,7 +433,8 @@ void leerUsuarios(vector<Usuario*> &usuarios) {
         while (getline(s, word, '|')) { 
   
             // add all the column data 
-            // of a row to a vector 
+            // of a row to a vector
+	//		cout << "word: " << word << endl; 
             row.push_back(word); 
         } 
   		
@@ -443,7 +450,12 @@ void leerUsuarios(vector<Usuario*> &usuarios) {
   		
   		Usuario *user = new Usuario(row2[0],row2[1],row2[2]);
   		
+  	//	cout << "row2[0]: " << row2[0] << endl
+  	//		 << "row2[1]: " << row2[1] << endl
+  	//		 << "row2[2]: " << row2[2] << endl;
+  		
   		usuarios.push_back(user);
+  //		cout << "Usuario creado" << endl;
   		conteo++;
   		
   		for(int i = 1; i < row.size(); i++) {
@@ -457,18 +469,21 @@ void leerUsuarios(vector<Usuario*> &usuarios) {
         	} 
         	
         	Post *post = new Post(row3[0],row3[1],stoi(row3[2]),stoi(row3[3]));
+    //    	cout << "post creado" << endl;
         	
         	for(int j = 4; j < row3.size(); j += 2) {
         		
         		post->comentarios.push_back(row3[j]);
         		post->comentarios.push_back(row3[j+1]);
+     //   		cout << "comentario creado" << endl;
 			}
         	
         	user->posts.push_back(*post);
+    //    	cout << "post agregado" << endl;
 		}
     }
 	
-	//cout << "conteo: " << conteo << endl;
+//	cout << "conteo: " << conteo << endl;
 //	cout << "size array: " << usuarios.size() << endl;
 	
 //	for (int i = 0; i < usuarios.size(); i++) {
