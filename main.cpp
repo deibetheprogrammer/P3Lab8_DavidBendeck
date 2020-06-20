@@ -207,7 +207,6 @@ int main(int argc, char** argv) {
 							string titulo;
 							getline(cin,titulo);
 							
-							cin.ignore(100,'\n');
 							cout << "Ingrese el contenido de su post: ";
 							
 							string contenido;
@@ -399,6 +398,8 @@ void guardarUsuarios(vector<Usuario*> &usuarios) {
 //Funcion que lee los usuarios
 void leerUsuarios(vector<Usuario*> &usuarios) {
 	
+	int conteo = 0;
+	
 	 // File pointer 
     fstream fin; 
   
@@ -443,6 +444,7 @@ void leerUsuarios(vector<Usuario*> &usuarios) {
   		Usuario *user = new Usuario(row2[0],row2[1],row2[2]);
   		
   		usuarios.push_back(user);
+  		conteo++;
   		
   		for(int i = 1; i < row.size(); i++) {
   			
@@ -464,9 +466,14 @@ void leerUsuarios(vector<Usuario*> &usuarios) {
         	
         	user->posts.push_back(*post);
 		}
-		
-  		
-    } 
+    }
+	
+	//cout << "conteo: " << conteo << endl;
+//	cout << "size array: " << usuarios.size() << endl;
+	
+//	for (int i = 0; i < usuarios.size(); i++) {
+//		cout << usuarios[i]->toString() << endl;
+//	}
 	
 }
 
