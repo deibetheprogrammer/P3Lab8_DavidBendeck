@@ -11,7 +11,7 @@ class Post
 	public:
 		Post();
 		
-		Post(string,string);
+		Post(string,string,int,int);
 		
 		//ATRIBUTOS
 		string titulo;

@@ -15,6 +15,14 @@ Usuario::Usuario(string nombre, string nomUsuario, string clave) {
 
 string Usuario::toString() {
 	
+	string usuario = nombre + "," + nomUsuario + "," + clave;
+	
+	for(int i = 0; i < posts.size(); i++) {
+		usuario += "|" + posts[i].toString();
+	}
+	
+	return usuario;
+	
 }
 
 Usuario::~Usuario()

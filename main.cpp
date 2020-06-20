@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <fstream>
 #include "Usuario.h"
 #include "Post.h"
@@ -12,9 +13,14 @@ using namespace std;
 //Funcion que guarda los usuarios
 void guardarUsuarios(vector<Usuario*>&);
 
+//Funcion que lee los usuarios
+void leerUsuarios(vector<Usuario*>&);
+
 int main(int argc, char** argv) {
 	
 	vector<Usuario*> usuarios;
+	
+	leerUsuarios(usuarios);
 	
 	bool loop = true;
 	while(loop) {
@@ -193,6 +199,7 @@ int main(int argc, char** argv) {
 					switch(choice) {
 						case 1: {
 							
+							cin.ignore(100,'\n');
 							cout << endl
 								 << "****Crear Post***" << endl
 								 << "Ingrese el titulo de su post: ";
@@ -200,12 +207,13 @@ int main(int argc, char** argv) {
 							string titulo;
 							getline(cin,titulo);
 							
+							cin.ignore(100,'\n');
 							cout << "Ingrese el contenido de su post: ";
 							
 							string contenido;
 							getline(cin,contenido);
 							
-							uActual->posts.push_back(Post(titulo,contenido));
+							uActual->posts.push_back(Post(titulo,contenido,0,0));
 							
 							break;
 						}
@@ -230,6 +238,7 @@ int main(int argc, char** argv) {
 								cin >> indice;
 							}
 							
+							cin.ignore(100,'\n');
 							cout << "Ingrese su comentario: ";
 							string comentario;
 							getline(cin,comentario);
@@ -364,6 +373,7 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
+	guardarUsuarios(usuarios);
 	return 0;
 	
 }
@@ -379,13 +389,85 @@ void guardarUsuarios(vector<Usuario*> &usuarios) {
   
    	for(int i = 0; i < usuarios.size(); i++) {
    		
-   		fout << usuarios[i].toString() << endl;
+   		fout << usuarios[i]->toString() << endl;
    		
 	}
 	
 	fout.close();
 }
 
-
+//Funcion que lee los usuarios
+void leerUsuarios(vector<Usuario*> &usuarios) {
+	
+	 // File pointer 
+    fstream fin; 
+  
+    // Open an existing file 
+    fin.open("Usuarios.txt", ios::in); 
+  
+    // Read the Data from the file 
+    // as String Vector 
+    vector<string> row; 
+    string line, word, temp; 
+  
+    while (fin >> temp) { 
+  
+        row.clear(); 
+  
+        // read an entire row and 
+        // store it in a string variable 'line' 
+        getline(fin, line); 
+  
+        // used for breaking words 
+        stringstream s(line); 
+  
+        // read every column data of a row and 
+        // store it in a string variable, 'word' 
+        while (getline(s, word, '|')) { 
+  
+            // add all the column data 
+            // of a row to a vector 
+            row.push_back(word); 
+        } 
+  		
+  		vector<string> row2;
+  		stringstream s2(row[0]);
+  		
+  		while (getline(s2, word, ',')) { 
+  
+            // add all the column data 
+            // of a row to a vector 
+            row2.push_back(word); 
+        } 
+  		
+  		Usuario *user = new Usuario(row2[0],row2[1],row2[2]);
+  		
+  		usuarios.push_back(user);
+  		
+  		for(int i = 1; i < row.size(); i++) {
+  			
+  			vector<string> row3;
+  			stringstream s3(row[i]);
+  			
+  			while (getline(s3, word, ',')) { 
+  
+            	row3.push_back(word); 
+        	} 
+        	
+        	Post *post = new Post(row3[0],row3[1],stoi(row3[2]),stoi(row3[3]));
+        	
+        	for(int j = 4; j < row3.size(); j += 2) {
+        		
+        		post->comentarios.push_back(row3[j]);
+        		post->comentarios.push_back(row3[j+1]);
+			}
+        	
+        	user->posts.push_back(*post);
+		}
+		
+  		
+    } 
+	
+}
 
 
